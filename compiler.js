@@ -20993,7 +20993,7 @@
 	    // handle special case — `class={possiblyUndefined}` with scoped CSS
 	    if (attribute.chunks.length === 2 && attribute.chunks[1].synthetic) {
 	        const value = attribute.chunks[0].node;
-	        return x `@escape(@null_to_empty(${value})) + "${attribute.chunks[1].data}"`;
+	        return x `@escape(@null_to_empty(${value}),true) + "${attribute.chunks[1].data}"`;
 	    }
 	    return get_attribute_value(attribute);
 	}
@@ -21004,7 +21004,7 @@
 	        .map((chunk) => {
 	        return chunk.type === 'Text'
 	            ? string_literal(chunk.data.replace(/"/g, '&quot;'))
-	            : x `@escape(${chunk.node})`;
+	            : x `@escape(${chunk.node},true)`;
 	    })
 	        .reduce((lhs, rhs) => x `${lhs} + ${rhs}`);
 	}

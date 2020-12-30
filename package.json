@@ -22,8 +22,7 @@
     "node": ">= 8"
   },
   "types": "types/runtime/index.d.ts",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/sveltejs/svelte.git"

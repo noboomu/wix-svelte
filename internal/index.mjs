@@ -1242,15 +1242,32 @@ function spread(args, classes_to_add) {
     });
     return str;
 }
+
+const ATTR_REGEX = /[&"]/g;
+const CONTENT_REGEX = /[&<]/g;
+
 const escaped = {
-    '"': '&quot;',
-    "'": '&#39;',
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;'
+	'"': '&quot;',
+	'&': '&amp;',
+	'<': '&lt'
 };
-function escape(html) {
-    return String(html).replace(/["'&<>]/g, match => escaped[match]);
+
+function escape(html, is_attr ) {
+	if (typeof html !== 'string') return html;
+
+	const pattern = is_attr ? ATTR_REGEX : CONTENT_REGEX;
+	pattern.lastIndex = 0;
+
+	let escapes = '';
+	let last = 0;
+
+	while (pattern.test(html)) {
+		const i = pattern.lastIndex - 1;
+		escapes += html.slice(last, i) + escaped[html[i]];
+		last = i + 1;
+	}
+
+	return escapes + html.slice(last);
 }
 function each(items, fn) {
     let str = '';
@@ -1314,7 +1331,8 @@ function create_ssr_component(fn) {
 function add_attribute(name, value, boolean) {
     if (value == null || (boolean && !value))
         return '';
-    return ` ${name}${value === true ? '' : `=${typeof value === 'string' ? JSON.stringify(escape(value)) : `"${value}"`}`}`;
+        return ` ${name}${value === true ? '' : `=${typeof value === 'string' ? JSON.stringify(escape(value, true)) : `"${value}"`}`}`;
+
 }
 function add_classes(classes) {
     return classes ? ` class="${classes}"` : ``;

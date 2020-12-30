@@ -2,12 +2,10 @@ export declare const invalid_attribute_name_character: RegExp;
 export declare function spread(args: any, classes_to_add: any): string;
 export declare const escaped: {
     '"': string;
-    "'": string;
     '&': string;
     '<': string;
-    '>': string;
 };
-export declare function escape(html: any): string;
+export declare function escape(html: any, is_attr = false): string;
 export declare function each(items: any, fn: any): string;
 export declare const missing_component: {
     $$render: () => string;
